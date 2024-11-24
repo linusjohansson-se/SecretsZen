@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 using SharedKernel;
 
 namespace Infrastructure;
@@ -26,7 +27,11 @@ public static class DependencyInjection
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
             .AddAuthenticationInternal(configuration)
-            .AddAuthorizationInternal();
+            .AddAuthorizationInternal()
+            .AddQuartz(options =>
+            {
+            })
+            .AddQuartzHostedService();
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
