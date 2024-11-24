@@ -5,9 +5,15 @@ namespace Application.Secrets.Create;
 
 public sealed class CreateSecretTextCommand : ICommand<Guid>
 {
-    public Guid UserId { get; set; }
-    public string Description { get; set; }
-    public DateTime? DueDate { get; set; }
-    public List<string> Labels { get; set; } = [];
-    public Priority Priority { get; set; }
+    public string SecretString  { get; set; }
+    
+    public int Views  { get; set; }
+    
+    public int AmountOfViews  { get; set; }
+    
+    public int AmountOfDays  { get; set; }
+    
+    public bool UnlimitedViews  { get; set; }
+    
+    public bool UnlimitedTime  { get; set; }
 }

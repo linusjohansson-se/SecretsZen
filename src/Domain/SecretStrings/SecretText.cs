@@ -1,8 +1,10 @@
+using SharedKernel;
+
 namespace Domain.SecretStrings;
 
-public class SecretText
+public class SecretText : Entity
 {
-    private SecretText(string secretString, DateTime expirationDate, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime)
+    private SecretText(string secretString, DateTime expirationDate, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime, DateTime updatedAt, DateTime createdAt)
     {
         Id = Guid.NewGuid();
         SecretString = secretString; //Implement hasher?
@@ -12,9 +14,11 @@ public class SecretText
         AmountOfDays = amountOfDays;
         UnlimitedViews = unlimitedViews;
         UnlimitedTime = unlimitedTime;
+        UpdatedAt = updatedAt;
+        CreatedAt = createdAt;
     }
 
-    public static SecretText Create(string secretString, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime)
+    public static SecretText Create(string secretString, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime, DateTime updatedAt, DateTime createdAt)
     {
         return new SecretText(
             secretString,
@@ -23,7 +27,9 @@ public class SecretText
             amountOfViews,
             amountOfDays,
             unlimitedViews,
-            unlimitedTime);
+            unlimitedTime,
+            updatedAt,
+            createdAt);
     }
     public Guid Id { get; private set; }
     
@@ -40,4 +46,8 @@ public class SecretText
     public bool UnlimitedViews { get; private set; }
     
     public bool UnlimitedTime { get; private set; }
+    
+    public DateTime UpdatedAt { get; private set; }
+    
+    public DateTime CreatedAt { get; private set; }
 }
