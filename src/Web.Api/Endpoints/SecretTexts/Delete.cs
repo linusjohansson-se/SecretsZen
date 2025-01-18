@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Secrets.Delete;
+using MediatR;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
-/*
+
 namespace Web.Api.Endpoints.SecretTexts;
 
 internal sealed class Delete : IEndpoint
@@ -11,14 +12,14 @@ internal sealed class Delete : IEndpoint
     {
         app.MapDelete("secrettexts/{id:guid}", async (Guid id, ISender sender, CancellationToken cancellationToken) =>
         {
-            var command = new DeleteTodoCommand(id);
+            var command = new DeleteSecretTextCommand(id);
 
             Result result = await sender.Send(command, cancellationToken);
 
             return result.Match(Results.NoContent, CustomResults.Problem);
         })
-        .WithTags(Tags.Todos)
+        .WithTags(Tags.SecretTexts)
         .RequireAuthorization();
     }
 }
-*/
+
