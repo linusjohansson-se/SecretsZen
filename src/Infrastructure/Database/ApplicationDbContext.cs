@@ -1,7 +1,5 @@
 ﻿using Application.Abstractions.Data;
 using Domain.SecretStrings;
-using Domain.Todos;
-using Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -11,9 +9,6 @@ namespace Infrastructure.Database;
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
     : DbContext(options), IApplicationDbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<TodoItem> TodoItems { get; set; }
-    
     public DbSet<SecretText> SecretTexts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

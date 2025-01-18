@@ -1,13 +1,16 @@
-﻿namespace Application.Todos.Get;
+﻿namespace Application.Secrets;
 
 public sealed class SecretTextResponse
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public string Description { get; set; }
-    public DateTime? DueDate { get; set; }
-    public List<string> Labels { get; set; }
-    public bool IsCompleted { get; set; }
+    public string SecretString { get; set; }
+    public int Views { get; set; }
+    public int AmountOfViews { get; set; }
+    public int AmountOfDays { get; set; }
+    public bool UnlimitedViews { get; set; }
+    public bool UnlimitedTime { get; set; }
+    
+    public DateTime ExpirationDate { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

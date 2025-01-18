@@ -1,8 +1,5 @@
 ﻿using System.Text;
-using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
-using Infrastructure.Authentication;
-using Infrastructure.Authorization;
 using Infrastructure.Database;
 using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -82,9 +79,6 @@ public static class DependencyInjection
             });
 
         services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<ITokenProvider, TokenProvider>();
 
         return services;
     }
@@ -92,12 +86,6 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
         services.AddAuthorization();
-
-        services.AddScoped<PermissionProvider>();
-
-        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-
-        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         return services;
     }

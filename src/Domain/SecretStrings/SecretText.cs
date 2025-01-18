@@ -7,7 +7,7 @@ public class SecretText : Entity
     private SecretText(string secretString, DateTime expirationDate, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime, DateTime updatedAt, DateTime createdAt)
     {
         Id = Guid.NewGuid();
-        SecretString = secretString; //Implement hasher?
+        SecretString = secretString;
         ExpirationDate = expirationDate;
         Views = views;
         AmountOfViews = amountOfViews;
@@ -37,9 +37,9 @@ public class SecretText : Entity
     
     public int AmountOfDays { get; private set; }
     
-    public DateTime? ExpirationDate { get; private set; }
+    public DateTime ExpirationDate { get; private set; }
     
-    public int? Views { get; private set; }
+    public int Views { get; private set; }
     
     public int AmountOfViews { get; private set; }
 

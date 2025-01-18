@@ -1,38 +1,37 @@
-﻿using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Todos.Get;
-using Domain.Todos;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
 namespace Application.Secrets.GetById;
 
-internal sealed class GetSecretTextByIdQueryHandler(IApplicationDbContext context, IUserContext userContext) 
+internal sealed class GetSecretTextByIdQueryHandler(IApplicationDbContext context) 
     : IQueryHandler<GetSecretTextByIdQuery, SecretTextResponse>
 {
     public async Task<Result<SecretTextResponse>> Handle(GetSecretTextByIdQuery query, CancellationToken cancellationToken)
     {
-        SecretTextResponse? todo = await context.TodoItems
-            .Where(todoItem => todoItem.Id == query.TodoItemId && todoItem.UserId == userContext.UserId)
-            .Select(todoItem => new SecretTextResponse
+        SecretTextResponse? secretText = await context.SecretTexts
+            .Where(x => x.Id == query.Id)
+            .Select(x => new SecretTextResponse
             {
-                Id = todoItem.Id,
-                UserId = todoItem.UserId,
-                Description = todoItem.Description,
-                DueDate = todoItem.DueDate,
-                Labels = todoItem.Labels,
-                IsCompleted = todoItem.IsCompleted,
-                CreatedAt = todoItem.CreatedAt,
-                CompletedAt = todoItem.CompletedAt
+                Id = x.Id,
+                SecretString = x.SecretString,
+                Views = x.Views,
+                AmountOfViews = x.AmountOfViews,
+                AmountOfDays = x.AmountOfDays,
+                UnlimitedViews = x.UnlimitedViews,
+                UnlimitedTime = x.UnlimitedTime,
+                ExpirationDate = x.ExpirationDate,
+                UpdatedAt = x.UpdatedAt,
+                CreatedAt = x.CreatedAt
             })
             .SingleOrDefaultAsync(cancellationToken);
 
-        if (todo is null)
+        if (secretText is null)
         {
-            return Result.Failure<SecretTextResponse>(TodoItemErrors.NotFound(query.TodoItemId));
+            //return Result.Failure<SecretTextResponse>(SecretTextEr.NotFound(query.Id));
         }
 
-        return todo;
+        return secretText;
     }
 }
