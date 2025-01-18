@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Domain.SecretStrings;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -29,7 +30,7 @@ internal sealed class GetSecretTextByIdQueryHandler(IApplicationDbContext contex
 
         if (secretText is null)
         {
-            //return Result.Failure<SecretTextResponse>(SecretTextEr.NotFound(query.Id));
+            return Result.Failure<SecretTextResponse>(SecretTextErrors.NotFound());
         }
 
         return secretText;
