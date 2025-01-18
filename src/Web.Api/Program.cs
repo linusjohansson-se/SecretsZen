@@ -3,6 +3,7 @@ using Application;
 using HealthChecks.UI.Client;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Quartz;
 using Serilog;
 using Web.Api;
 using Web.Api.Extensions;
@@ -16,7 +17,8 @@ builder.Services.AddSwaggerGenWithAuth();
 builder.Services
     .AddApplication()
     .AddPresentation()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration)
+    .AddQuartzHostedService();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
