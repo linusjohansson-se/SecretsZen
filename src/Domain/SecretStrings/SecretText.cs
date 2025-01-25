@@ -50,4 +50,10 @@ public class SecretText : Entity
     public DateTime UpdatedAt { get; private set; }
     
     public DateTime CreatedAt { get; private set; }
+    
+    public void UpdateViews(int views)
+    {
+        views++;
+        Views = views;
+    }
 }

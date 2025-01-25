@@ -44,10 +44,6 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 // REMARK: If you want to use Controllers, you'll need this.
 app.MapControllers();
 

@@ -13,6 +13,16 @@ internal sealed class CreateSecretTextCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreateSecretTextCommand command, CancellationToken cancellationToken)
     {
+        if (!command.UnlimitedTime && command.AmountOfDays < 1)
+        {
+            return Result.Failure<Guid>(SecretTextErrors.DaysZero());
+        }
+        
+        if (!command.UnlimitedViews && command.AmountOfViews < 1)
+        {
+            return Result.Failure<Guid>(SecretTextErrors.ViewsZero());
+        }
+        
         var secretText = SecretText.Create(
             command.SecretString,
             command.Views,
