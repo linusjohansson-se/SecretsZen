@@ -25,7 +25,6 @@ internal sealed class CreateSecretTextCommandHandler(
         
         var secretText = SecretText.Create(
             command.SecretString,
-            command.Views,
             command.AmountOfViews,
             command.AmountOfDays,
             command.UnlimitedViews,
