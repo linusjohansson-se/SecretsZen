@@ -31,4 +31,11 @@ public static class SecretTextErrors
             "SecretTexts.Expired",
             "The Secret text expired.");
     }
+
+    public static Error DecryptFailed()
+    {
+        return Error.Problem(
+            "SecretTexts.DecryptFailed",
+            "Decryption failed. Was the encryption key changed?");
+    }
 }
