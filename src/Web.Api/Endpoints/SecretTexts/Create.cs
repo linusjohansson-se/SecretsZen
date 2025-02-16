@@ -16,7 +16,6 @@ internal sealed class Create : IEndpoint
 
                 return result.Match(Results.Ok, CustomResults.Problem);
             })
-            .WithTags(Tags.SecretTexts)
-            .RequireAuthorization();
+            .WithTags(Tags.SecretTexts);
     }
 }

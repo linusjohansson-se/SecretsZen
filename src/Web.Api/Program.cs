@@ -1,5 +1,7 @@
 using System.Reflection;
 using Application;
+using Application.Services;
+using Domain.Services;
 using HealthChecks.UI.Client;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -19,6 +21,9 @@ builder.Services
     .AddPresentation()
     .AddInfrastructure(builder.Configuration)
     .AddQuartzHostedService();
+
+builder.Services.Configure<EncryptionOptions>(builder.Configuration.GetSection("EncryptionOptions"));
+builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -44,10 +49,6 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 // REMARK: If you want to use Controllers, you'll need this.
 app.MapControllers();
 
@@ -56,5 +57,5 @@ await app.RunAsync();
 // REMARK: Required for functional and integration tests to work.
 namespace Web.Api
 {
-    public partial class Program;
+    public class Program;
 }

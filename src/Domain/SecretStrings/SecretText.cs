@@ -18,12 +18,12 @@ public class SecretText : Entity
         CreatedAt = createdAt;
     }
 
-    public static SecretText Create(string secretString, int views, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime, DateTime updatedAt, DateTime createdAt)
+    public static SecretText Create(string secretString, int amountOfViews, int amountOfDays, bool unlimitedViews, bool unlimitedTime, DateTime updatedAt, DateTime createdAt)
     {
         return new SecretText(
             secretString,
             DateTime.UtcNow.AddDays(amountOfDays),
-            views,
+            0,
             amountOfViews,
             amountOfDays,
             unlimitedViews,
@@ -50,4 +50,10 @@ public class SecretText : Entity
     public DateTime UpdatedAt { get; private set; }
     
     public DateTime CreatedAt { get; private set; }
+    
+    public void UpdateViews(int views)
+    {
+        views++;
+        Views = views;
+    }
 }
