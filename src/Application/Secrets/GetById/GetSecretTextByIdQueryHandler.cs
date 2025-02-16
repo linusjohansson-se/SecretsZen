@@ -2,6 +2,7 @@
 using Application.Abstractions.Messaging;
 using Application.Secrets.Delete;
 using Domain.SecretStrings;
+using Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -11,11 +12,12 @@ namespace Application.Secrets.GetById;
 internal sealed class GetSecretTextByIdQueryHandler(
     IApplicationDbContext context,
     ISender sender,
-    IDateTimeProvider dateTimeProvider)
+    IDateTimeProvider dateTimeProvider,
+    IEncryptionService encryptionService)
     : IQueryHandler<GetSecretTextByIdQuery, SecretTextResponse>
 {
-    public IDateTimeProvider _dateTimeProvider { get; } = dateTimeProvider;
-
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
+    private readonly IEncryptionService _encryptionService = encryptionService;
 
     public async Task<Result<SecretTextResponse>> Handle(GetSecretTextByIdQuery query,
         CancellationToken cancellationToken)
@@ -44,10 +46,21 @@ internal sealed class GetSecretTextByIdQueryHandler(
             return Result.Failure<SecretTextResponse>(SecretTextErrors.Expired());
         }
 
+        string decryptedSecret;
+        try
+        {
+            decryptedSecret = _encryptionService.Decrypt(secretText.SecretString);
+        }
+        catch
+        {
+            return Result.Failure<SecretTextResponse>(SecretTextErrors.DecryptFailed());
+        }
+
+
         var response = new SecretTextResponse
         {
             Id = secretText.Id,
-            SecretString = secretText.SecretString,
+            SecretString = decryptedSecret,
             Views = secretText.Views,
             AmountOfViews = secretText.AmountOfViews,
             AmountOfDays = secretText.AmountOfDays,
