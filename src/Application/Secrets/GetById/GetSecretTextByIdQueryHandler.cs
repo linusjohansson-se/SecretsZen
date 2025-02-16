@@ -8,10 +8,17 @@ using SharedKernel;
 
 namespace Application.Secrets.GetById;
 
-internal sealed class GetSecretTextByIdQueryHandler(IApplicationDbContext context, ISender sender) 
+internal sealed class GetSecretTextByIdQueryHandler(
+    IApplicationDbContext context,
+    ISender sender,
+    IDateTimeProvider dateTimeProvider)
     : IQueryHandler<GetSecretTextByIdQuery, SecretTextResponse>
 {
-    public async Task<Result<SecretTextResponse>> Handle(GetSecretTextByIdQuery query, CancellationToken cancellationToken)
+    public IDateTimeProvider _dateTimeProvider { get; } = dateTimeProvider;
+
+
+    public async Task<Result<SecretTextResponse>> Handle(GetSecretTextByIdQuery query,
+        CancellationToken cancellationToken)
     {
         SecretText? secretText = await context.SecretTexts
             .Where(x => x.Id == query.Id)
@@ -21,16 +28,22 @@ internal sealed class GetSecretTextByIdQueryHandler(IApplicationDbContext contex
         {
             return Result.Failure<SecretTextResponse>(SecretTextErrors.NotFound());
         }
-        
+
         secretText.UpdateViews(secretText.Views);
-        
+
         await context.SaveChangesAsync(cancellationToken);
 
         if (!secretText.UnlimitedViews && secretText.Views >= secretText.AmountOfViews)
         {
             await sender.Send(new DeleteSecretTextCommand(secretText.Id), cancellationToken);
         }
-        
+
+        if (!secretText.UnlimitedTime && secretText.ExpirationDate < _dateTimeProvider.UtcNow)
+        {
+            await sender.Send(new DeleteSecretTextCommand(secretText.Id), cancellationToken);
+            return Result.Failure<SecretTextResponse>(SecretTextErrors.Expired());
+        }
+
         var response = new SecretTextResponse
         {
             Id = secretText.Id,
