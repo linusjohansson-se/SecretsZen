@@ -10,7 +10,7 @@ export default function SecretInputCard() {
   const [link, setLink] = useState("aa");
 
   return (
-    <FieldGroup className="flex flex-col w-full max-w-full">
+    <FieldGroup>
       <FieldSet>
         <FieldLegend>Generate link for secret</FieldLegend>
         <FieldDescription>All secrets are encrypted and only stored while link is active</FieldDescription>

@@ -1,12 +1,14 @@
-import SecretInputCard from "./features/secrets/components/SecretInputCard"
+import { createRouter, RouterProvider } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen'
 
-function App() {
+const router = createRouter({ routeTree })
 
-  return (
-    <>
-      <SecretInputCard />
-    </>
-  )
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
 }
 
-export default App
+export default function App() {
+  return <RouterProvider router={router} />
+}
