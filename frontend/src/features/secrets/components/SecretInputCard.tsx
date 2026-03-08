@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from "@/components/ui/field";
+import { FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { useState } from "react";
 
 export default function SecretInputCard() {
-  const expiryText = "test"
-  const viewDestructText = "test2"
+  const [expiryDays, setExpiryDays] = useState(7);
+  const [maxViews, setMaxViews] = useState(10);
+  const [link, setLink] = useState("aa");
 
   return (
     <FieldGroup className="flex flex-col w-full max-w-full">
@@ -18,30 +19,35 @@ export default function SecretInputCard() {
             <FieldLabel>Password or secret</FieldLabel>
             <Input />
           </FieldSet>
-        </FieldGroup>
-        <FieldGroup>
-          <FieldContent>
+          <FieldSet>
             <div className="flex flex-row justify-between">
               <FieldLabel>Expire after</FieldLabel>
-              <FieldLabel>{expiryText}</FieldLabel>
+              <span className="text-sm text-muted-foreground">{expiryDays}{expiryDays > 1 ? " days" : " day"}</span>
             </div>
-            <Slider />
-            <FieldDescription>Link expires after {expiryText}</FieldDescription>
-          </FieldContent>
-        </FieldGroup>
-        <FieldGroup>
-          <FieldContent>
+            <Slider defaultValue={[expiryDays]} min={1} max={30} onValueChange={(val) => setExpiryDays(Array.isArray(val) ? val[0] : val)} />
+          </FieldSet>
+          <FieldSet>
             <div className="flex flex-row justify-between">
               <FieldLabel>Max views</FieldLabel>
-              <FieldLabel>{viewDestructText}</FieldLabel>
+              <span className="text-sm text-muted-foreground">{maxViews}{maxViews > 1 ? " views" : " view"}</span>
             </div>
-            <Slider />
-            <FieldDescription>Link self-destructs after {viewDestructText}</FieldDescription>
-          </FieldContent>
+            <Slider defaultValue={[maxViews]} min={1} max={100} onValueChange={(val) => setMaxViews(Array.isArray(val) ? val[0] : val)} />
+          </FieldSet>
         </FieldGroup>
-        <Button title="Generate Secure Link">Generate Secure Link</Button>
+        <Button>Generate Secure Link</Button>
       </FieldSet>
-    </FieldGroup >
+      {link && (
+        <>
+          <FieldSeparator />
+          <FieldGroup>
+            <FieldSet>
+              <FieldLabel>Your secure link</FieldLabel>
+              <Input value={link} readOnly />
+            </FieldSet>
+          </FieldGroup>
+        </>
+      )}
+    </FieldGroup>
   )
 
 }
