@@ -1,10 +1,10 @@
-import './App.css'
+import SecretInputCard from "./features/secrets/components/SecretInputCard"
 
 function App() {
 
   return (
     <>
-      <h1>test</h1>
+      <SecretInputCard />
     </>
   )
 }
