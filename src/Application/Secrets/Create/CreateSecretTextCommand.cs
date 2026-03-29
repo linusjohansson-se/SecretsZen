@@ -9,8 +9,4 @@ public sealed class CreateSecretTextCommand : ICommand<Guid>
     public int AmountOfViews  { get; set; }
     
     public int AmountOfDays  { get; set; }
-    
-    public bool UnlimitedViews  { get; set; }
-    
-    public bool UnlimitedTime  { get; set; }
 }

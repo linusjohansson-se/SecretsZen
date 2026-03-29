@@ -16,24 +16,14 @@ internal sealed class CreateSecretTextCommandHandler(
 
     public async Task<Result<Guid>> Handle(CreateSecretTextCommand command, CancellationToken cancellationToken)
     {
-        if (!command.UnlimitedTime && command.AmountOfDays < 1)
-        {
-            return Result.Failure<Guid>(SecretTextErrors.DaysZero());
-        }
-
-        if (!command.UnlimitedViews && command.AmountOfViews < 1)
-        {
-            return Result.Failure<Guid>(SecretTextErrors.ViewsZero());
-        }
-
         string secret = _encryptionService.Encrypt(command.SecretString);
 
         var secretText = SecretText.Create(
             secret,
             command.AmountOfViews,
             command.AmountOfDays,
-            command.UnlimitedViews,
-            command.UnlimitedTime,
+            false,
+            false,
             dateTimeProvider.UtcNow,
             dateTimeProvider.UtcNow
         );

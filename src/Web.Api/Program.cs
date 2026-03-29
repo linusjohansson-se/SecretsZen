@@ -29,14 +29,14 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
 
-app.MapEndpoints();
+app.MapEndpoints(app.MapGroup("api"));
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerWithUi();
-
-    app.ApplyMigrations();
 }
+
+app.ApplyMigrations();
 
 app.MapHealthChecks("health", new HealthCheckOptions
 {
@@ -49,12 +49,10 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-// REMARK: If you want to use Controllers, you'll need this.
 app.MapControllers();
 
 await app.RunAsync();
 
-// REMARK: Required for functional and integration tests to work.
 namespace Web.Api
 {
     public class Program;

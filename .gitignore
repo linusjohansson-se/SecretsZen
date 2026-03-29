@@ -400,3 +400,5 @@ FodyWeavers.xsd
 .containers/
 
 frontend/.env.development
+
+.idea/.idea.SecretsZen/Docker/docker-compose.generated.override.yml
