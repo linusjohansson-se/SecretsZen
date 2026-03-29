@@ -2,12 +2,46 @@ import { Button } from "@/components/ui/button";
 import { FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useCreateSecret from "../hooks/useCreateSecret";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 export default function SecretInputCard() {
     const [expiryDays, setExpiryDays] = useState(7);
     const [maxViews, setMaxViews] = useState(10);
     const [link, setLink] = useState("");
+    const [secret, setSecret] = useState("");
+
+    const { mutate, isPending } = useCreateSecret();
+
+    const handleGenerateLink = () => {
+        if (!secret) {
+            toast.error("Please enter a secret or password.");
+            return;
+        }
+
+        mutate(
+            { expiryDays: expiryDays, maxViews: maxViews, password: secret },
+            {
+                onSuccess: (data) => {
+                    if (data.ok) {
+                        data.json().then((res) => {
+                            setLink(`${window.location.origin}/s/${res.id}`);
+                        });
+                    } else {
+                        // Handle error response
+                        console.error("Failed to create secret");
+                        toast.error("Failed to create secret. Please try again later.");
+                    }
+                },
+                onError: (error) => {
+                    console.error("An error occurred:", error);
+                    toast.error("Failed to create secret. Please try again.");
+                },
+            }
+        );
+    };
 
     return (
         <FieldGroup>
@@ -17,7 +51,7 @@ export default function SecretInputCard() {
                 <FieldGroup>
                     <FieldSet>
                         <FieldLabel>Password or secret</FieldLabel>
-                        <Input />
+                        <Input onChange={(e) => setSecret(e.target.value)}/>
                     </FieldSet>
                     <FieldSet>
                         <div className="flex flex-row justify-between">
@@ -34,7 +68,7 @@ export default function SecretInputCard() {
                         <Slider defaultValue={[maxViews]} min={1} max={100} onValueChange={(val) => setMaxViews(Array.isArray(val) ? val[0] : val)} />
                     </FieldSet>
                 </FieldGroup>
-                <Button onClick={ }>Generate Secure Link</Button>
+                {isPending ? <Button disabled><Spinner />Generating...</Button> : <Button onClick={() => handleGenerateLink()}>Generate Secure Link</Button>}
             </FieldSet>
             {link && (
                 <>
