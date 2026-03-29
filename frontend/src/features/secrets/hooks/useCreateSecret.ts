@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 export default function useCreateSecret() {
     return useMutation({
         mutationFn: ({ expiryDays, maxViews, password }: { expiryDays: number; maxViews: number; password: string }) =>
-            fetch("/api/secrets", {
+            fetch("/api/secrettexts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
